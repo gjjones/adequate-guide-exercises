@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "test": "mocha ch*/spec.js"
+  },
+  "dependencies": {
+    "accounting": "^0.4.1",
+    "chai": "^1.9.1",
+    "ramda": "^0.13.0"
+  },
+  "devDependencies": {
+    "mocha": "~2.3.3"
+  }
+}
