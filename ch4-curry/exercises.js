@@ -3,53 +3,64 @@ var _ = require('ramda');
 
 // Exercise 1
 //==============
-// Refactor to remove all arguments by partially applying the function
+// Refactor with `_.curry` to partially apply the string separator
 
-var words = function(str) {
-  return _.split(' ', str);
-};
+var words = _.curry(_.split)(' ');
 
 // Exercise 1a
 //==============
-// Use map to make a new words fn that works on an array of strings.
+// Use `map` to make a function that applies `words` over an array of strings.
 
-var sentences = undefined;
+// LEAVE BE:
+var map = _.curry(function map(f, xs) { return xs.map(f); });
+
+var sentences = map(words);
 
 
 // Exercise 2
 //==============
-// Refactor to remove all arguments by partially applying the functions
+// Refactor to use curried versions of `filter` and `match` to define `filterQs`
 
-var filterQs = function(xs) {
-  return _.filter(function(x){ return match(/q/i, x);  }, xs);
-};
+var filter = _.curry(_.filter);
+var match = _.curry(_.match);
+
+var filterQs = filter(match(/q/i));
 
 
 // Exercise 3
 //==============
-// Use the helper function _keepHighest to refactor max to not reference any
-// arguments
+// Using `_keepHighest`, refactor `max` to be the result of a curried `reduce`
 
 // LEAVE BE:
 var _keepHighest = function(x,y){ return x >= y ? x : y; };
 
+var reduce = _.curry(_.reduce);
+
 // REFACTOR THIS ONE:
-var max = function(xs) {
-  return _.reduce(function(acc, x){
-    return _keepHighest(acc, x);
-  }, -Infinity, xs);
-};
+var max = reduce(_keepHighest)(-Infinity);
 
 
 // Bonus 1:
 // ============
-// wrap array's slice to be functional and curried.
+// Wrap the array's `slice` method as a curried function.
 // //[1,2,3].slice(0, 2)
-var slice = undefined;
+var slice = _.curry(function(from, to, arr) {
+	return arr.slice(from, to);
+});
 
 
 // Bonus 2:
 // ============
-// use slice to define a function "take" that takes n elements from the beginning of the string. Make it curried
-// // Result for "Something" with n=4 should be "Some"
-var take = undefined;
+// Using `slice`, define `take` as a higher order function that will take
+// the first n elements from a string.
+// Result for take(4)("Something") should be "Some"
+var take = slice(0);
+
+
+module.exports = { words: words,
+                   sentences: sentences,
+                   filterQs: filterQs,
+                   max: max,
+                   slice: slice,
+                   take: take
+                 };
